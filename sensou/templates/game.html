@@ -1,0 +1,35 @@
+{% load static %}
+TML5ひな形
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>戦争だぁ！</title>
+    <link rel="stylesheet" href="{% static 'style/game.css' %}">
+</head>
+
+<body>
+    <h1>戦争だぁ！</h1>
+        <div class="game_board">
+            <div class="container">
+                <ul>
+                    {% for i in range(hand) %}
+                    <li><img src="static/img/0_u.png" class="hand_card_img"></li>
+                    {% endfor %}
+                </ul>
+                <h2>NPC</h2>
+                <div class="box">
+                    <img src="static/img/{{ str_card(com_card) }}" class="card_img">
+                    <p>:{{ com_get_num }}</p>
+                </div>
+                
+
+
+            </div>
+        </div>
+    
+
+</body>
+
+</html>

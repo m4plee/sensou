@@ -4,79 +4,112 @@ from . import sensou
 
 def str_card(card):
     path = []
-    for i in card:
+    for _ in card:
         path.append(str(card[0]) + '_' + str(card[1] + '.png'))
 
 
 def game(request):
     if request.method == 'GET':
         is_gameover = False
-        is_win = False
         deck = sensou.Deck()
+        cnt = 0
+        player_get_num = 0
+        com_get_num = 0
+        plus = 0
+        hand = 26 - cnt
 
         request.session['deck'] = deck
         request.session['is_gameover'] = is_gameover
-        request.session['is_win'] = is_win
 
         d = {
-            message = '始めましょう！',
-            player_card = ['0_u.png'],
-            com_card = ['0_u.png'],
-            player_num = 0,
-            com_num = 0,
+            'message': '始めましょう！',
+            'player_card': ['0_u.png'],
+            'com_card': ['0_u.png'],
+            'player_get_num': 0,
+            'com_get_num': 0,
+            'cnt': 0,
+            'hand': hand
         }
 
         return render(request, 'game.html', d)
 
-    elif request.method == 'POST':
+    else:
         deck = request.session['deck']
         is_gameover = request.session['is_gameover']
-        is_win = request.session['is_win']
 
-        if not is_gameover:
+        player_card = [deck.emission()]
+        com_card = [deck.emission()]
+
+        if sensou.point(player_card) > sensou.point(com_card):
+            player_get_num += 1 + plus
+            cnt += 1
+            plus = 0
+            hand += cnt
+            deck = request.session['deck']
+            is_gameover = request.session['is_gameover']
+            d = {
+                'message': 'プレイヤーに１ポイント入ります！',
+                'player_card': ['str_card(player_card)'],
+                'com_card': ['str_card(com_card)'],
+                'player_get_num': player_get_num,
+                'com_get_num': com_get_num,
+                'cnt': cnt,
+                'hand': hand,
+            }
+            return render(request, 'game.html', d)
+
+        elif sensou.point(com_card) > sensou.point(player_card):
+            com_get_num += 1 + plus
+            cnt += 1
+            hand += cnt
+            deck = request.session['deck']
+            is_gameover = request.session['is_gameover']
+            plus = 0
+            d = {
+                'message': 'NPCに１ポイント入ります！',
+                'player_card': ['str_card(player_card)'],
+                'com_card': ['str_card(com_card)'],
+                'player_get_num': player_get_num,
+                'com_get_num': com_get_num,
+                'cnt': cnt,
+                'hand': hand,
+            }
+            return render(request, 'game.html', d)
+
+        else:
+            cnt += 1
+            plus += 1
+            hand += cnt
+            player_card = player_card.clear()
+            com_card = com_card.clear()
             player_card = [deck.emission()]
             com_card = [deck.emission()]
+            d = {
+                'message': 'もう一度カードを選んでください',
+                'player_card': ['str_card(player_card)'],
+                'com_card': ['str_card(com_card)'],
+                'player_get_num': player_get_num,
+                'com_get_num': com_get_num,
+                'cnt': cnt,
+                'hand': hand
+            }
+            return render(request, 'game.html', d)
+    if cnt == 26:
+        is_gameover = True
 
-            if sensou.point(player_card) > sensou.point(com_card):
-                player_num += 2
-                d = {
-                    message = 'プレイヤーの勝ちです！',
-                    player_card = ['str_card(player_card)'],
-                    com_card = ['str_card(com_card)'],
-                    player_num = player_num,
-                    com_num = com_num,
-                }   
-                return render(request, 'game.html', d)
+        if player_get_num > com_get_num:
+            msg = f'{player_get_num - com_get_num}ポイント差であなたの勝ちです！'
+        elif com_get_num > player_get_num:
+            msg = f'{com_get_num - player_get_num}ポイント差でNPCの勝ちです！'
+        else:
+            msg = '引き分けです！'
 
-            elif sensou.point(com_card) > sensou.point(player_card):
-                com_num += 2
-                d = {
-                    message = 'コンピューターの勝ちです！',
-                    player_card = ['str_card(player_card)'],
-                    com_card = ['str_card(com_card)'],
-                    player_num = player_num,
-                    com_num = com_num,
-                }   
-                return render(request, 'game.html', d)
-
-            else:
-                cnt = 2
-                difference = sensou.point(com_card) - sensou.point(player_card)
-                while difference > 1:
-                    player_card = player_card.clear()
-                    com_card = com_card.clear()
-                    player_card = [deck.emission()]
-                    com_card = [deck.emission()]
-                    cnt += 2
-                    d = {
-                        message = '引き分けです！',
-                        player_card = ['str_card(player_card)'],
-                        com_card = ['str_card(com_card)'],
-                        player_num = player_num,
-                        com_num = com_num,
-                    } 
-
-    
-
-
-            
+        d = {
+            'message': msg,
+            'player_card': ['str_card(player_card)'],
+            'com_card': ['str_card(com_card)'],
+            'player_get_num': player_get_num,
+            'com_get_num': com_get_num,
+            'cnt': cnt,
+            'hand': hand,
+        }
