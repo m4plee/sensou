@@ -16,7 +16,7 @@ def game(request):
         player_get_num = 0
         com_get_num = 0
         plus = 0
-        hand = 26 - cnt
+        hand = int(26 - cnt)
 
         request.session['deck'] = deck
         request.session['is_gameover'] = is_gameover
