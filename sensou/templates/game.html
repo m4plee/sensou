@@ -1,8 +1,6 @@
 {% load static %}
-TML5ひな形
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
     <meta charset="utf-8">
     <title>戦争だぁ！</title>
@@ -11,24 +9,34 @@ TML5ひな形
 
 <body>
     <h1>戦争だぁ！</h1>
-        <div class="game_board">
-            <div class="container">
-                <ul>
-                    {% for i in range(hand) %}
-                    <li><img src="static/img/0_u.png" class="hand_card_img"></li>
-                    {% endfor %}
-                </ul>
-                <h2>NPC</h2>
-                <div class="box">
-                    <img src="static/img/{{ str_card(com_card) }}" class="card_img">
-                    <p>:{{ com_get_num }}</p>
-                </div>
-                
+    <div class="game_board">
+        <ul class="comhand_card_img">
+            {% for hand in hands %}
+            <li><img src="static/img/{{ hand }}" class="comcard"></li>
+            {% endfor %}
+        </ul>
+        <div class="container">
+            <div class="box">
+            <h2>NPC</h2>
+                <img src="static/img/{{ com_card }}" class="card_img">
+                <p>NPCは{{ com_get_num }}ポイントです</p>
+            </div>
 
-
+            <div class="box">
+            <h2>あなた</h2>
+                <img src="static/img/{{ player_card }}" class="card_img">
+                <p>あなたは{{ player_get_num }}ポイントです</p>
             </div>
         </div>
-    
+        <ul class="playerhand_card_img">
+            {% for hand in hands %}
+            <li><img src="static/img/{{ hand }}" class="playercard"></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <p>{{ message }}</p>
+
 
 </body>
 

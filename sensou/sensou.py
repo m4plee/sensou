@@ -22,3 +22,12 @@ def point(card):
     else:
         return point
 
+
+# class Ura_card():
+#     def __init__(self):
+#         self.cards = [(0, 'u'), (0, 'u'), (0, 'u'), (0, 'u'), (0, 'u'), (0, 'u'), (0, 'u'), (0, 'u'), (0, 'u'), (0, 'u'), (0, 'u'), (0, 'u'),
+#                       (0, 'u'), (0, 'u'), (0, 'u'), (0, 'u'), (0, 'u'), (0, 'u'), (0, 'u'), (0, 'u'), (0, 'u'), (0, 'u'), (0, 'u'), (0, 'u'), ]
+     
+#     def ura_emission(self):
+#         emission_card = self.cards.pop()
+#         return emission_card

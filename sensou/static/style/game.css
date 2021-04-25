@@ -1,0 +1,27 @@
+h1{
+    text-align: center;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+}
+
+.comhand_card_img{
+    display: flex;
+    list-style: none;
+}
+
+.playerhand_card_img{
+    display: flex;
+    list-style: none;
+}
+
+.comcard{
+    width: 100px;
+}
+
+.playercard{
+    width: 100px;
+
+}
