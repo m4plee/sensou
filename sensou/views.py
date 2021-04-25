@@ -10,6 +10,7 @@ def str_card(card):
 
 ura_card = [(0, 'u')]
 
+
 def game(request):
     if request.method == 'GET':
         is_gameover = False
@@ -18,7 +19,7 @@ def game(request):
         player_get_num = 0
         com_get_num = 0
         plus = 0
-        hand_num = 26 - int(cnt)
+        hand_num = 24 - int(cnt)
 
         request.session['deck'] = deck
         request.session['is_gameover'] = is_gameover
@@ -30,7 +31,7 @@ def game(request):
             'player_get_num': 0,
             'com_get_num': 0,
             'cnt': 0,
-            'hands': ['0_u.png',] * hand_num
+            'hands': ['0_u.png'] * hand_num
         }
 
         return render(request, 'game.html', d)
@@ -46,7 +47,7 @@ def game(request):
             player_get_num += 1 + plus
             cnt += 1
             plus = 0
-            hands += cnt
+            hand_num = 24 - int(cnt)
             deck = request.session['deck']
             is_gameover = request.session['is_gameover']
             d = {
@@ -56,14 +57,14 @@ def game(request):
                 'player_get_num': player_get_num,
                 'com_get_num': com_get_num,
                 'cnt': cnt,
-                'hands': ['0_u.png' * hands],
+                'hands': ['0_u.png'] * hand_num,
             }
             return render(request, 'game.html', d)
 
         elif sensou.point(com_card) > sensou.point(player_card):
             com_get_num += 1 + plus
             cnt += 1
-            hands += cnt
+            hand_num = 24 - int(cnt)
             deck = request.session['deck']
             is_gameover = request.session['is_gameover']
             plus = 0
@@ -81,7 +82,7 @@ def game(request):
         else:
             cnt += 1
             plus += 1
-            hands += cnt
+            hand_num = 24 - int(cnt)
             player_card = player_card.clear()
             com_card = com_card.clear()
             player_card = [deck.emission()]

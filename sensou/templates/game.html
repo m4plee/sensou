@@ -10,29 +10,36 @@
 <body>
     <h1>戦争だぁ！</h1>
     <div class="game_board">
+        <div class="leftside"></div>
         <ul class="comhand_card_img">
             {% for hand in hands %}
-            <li><img src="static/img/{{ hand }}" class="comcard"></li>
+            <li class="comcard"><img src="static/img/{{ hand }}" class="ura_comcard"></li>
             {% endfor %}
         </ul>
         <div class="container">
             <div class="box">
             <h2>NPC</h2>
-                <img src="static/img/{{ com_card }}" class="card_img">
+                {% for show in com_card %}
+                <img src="static/img/{{ show }}" class="card_img">
+                {% endfor %}
                 <p>NPCは{{ com_get_num }}ポイントです</p>
             </div>
-
+            
             <div class="box">
-            <h2>あなた</h2>
-                <img src="static/img/{{ player_card }}" class="card_img">
+                <h2>あなた</h2>
+                {% for show in player_card %}
+                <img src="static/img/{{ show }}" class="card_img">
+                {% endfor %}
                 <p>あなたは{{ player_get_num }}ポイントです</p>
             </div>
         </div>
-        <ul class="playerhand_card_img">
-            {% for hand in hands %}
-            <li><img src="static/img/{{ hand }}" class="playercard"></li>
-            {% endfor %}
-        </ul>
+        <div class="rightside">
+            <ul class="playerhand_card_img">
+                {% for hand in hands %}
+                <li class="playercard"><img src="static/img/{{ hand }}" class="ura_playercard"></li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 
     <p>{{ message }}</p>

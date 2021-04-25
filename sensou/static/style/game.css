@@ -2,26 +2,44 @@ h1{
     text-align: center;
 }
 
+.ura_comcard{
+    width: 100px;
+}
+
+.ura_playercard{
+    width: 100px;
+}
+
 .container{
     display: flex;
     justify-content: center;
 }
 
+.leftside{
+    align-content: flex-start;
+}
+
 .comhand_card_img{
     display: flex;
     list-style: none;
+    padding: 0%;
+}
+
+.rightside{
+    align-content: flex-end;
 }
 
 .playerhand_card_img{
     display: flex;
     list-style: none;
+    justify-content: flex-end;
+    padding: 0%;
 }
 
 .comcard{
-    width: 100px;
+    width: 50px;
 }
 
 .playercard{
-    width: 100px;
-
+    width: 50px;
 }
