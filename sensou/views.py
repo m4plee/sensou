@@ -12,8 +12,9 @@ ura_card = [(0, 'u')]
 
 
 def game(request):
-    if request.method == 'GET':
+    if request.method == 'GET' or 'restart' in request.POST:
         is_gameover = False
+        is_gamestart = True
         deck = sensou.Deck()
         cnt = 0
         player_get_num = 0
@@ -23,6 +24,7 @@ def game(request):
 
         request.session['deck'] = deck
         request.session['is_gameover'] = is_gameover
+        request.session['is_gamestart'] = is_gamestart
 
         d = {
             'message': '始めましょう！',
@@ -36,9 +38,10 @@ def game(request):
 
         return render(request, 'game.html', d)
 
-    else:
+    elif request.method == 'POST':
         deck = request.session['deck']
         is_gameover = request.session['is_gameover']
+        is_gamestart = False
 
         player_card = [deck.emission()]
         com_card = [deck.emission()]
@@ -50,6 +53,7 @@ def game(request):
             hand_num = 24 - int(cnt)
             deck = request.session['deck']
             is_gameover = request.session['is_gameover']
+            is_gamestart = request.session['is_gamestart']
             d = {
                 'message': 'プレイヤーに１ポイント入ります！',
                 'player_card': ['str_card(player_card)'],
@@ -67,6 +71,7 @@ def game(request):
             hand_num = 24 - int(cnt)
             deck = request.session['deck']
             is_gameover = request.session['is_gameover']
+            is_gamestart = request.session['is_gamestart']
             plus = 0
             d = {
                 'message': 'NPCに１ポイント入ります！',
@@ -75,7 +80,7 @@ def game(request):
                 'player_get_num': player_get_num,
                 'com_get_num': com_get_num,
                 'cnt': cnt,
-                'hands': ['0_u.png',] * hand_num
+                'hands': ['0_u.png'] * hand_num
             }
             return render(request, 'game.html', d)
 
@@ -94,7 +99,7 @@ def game(request):
                 'player_get_num': player_get_num,
                 'com_get_num': com_get_num,
                 'cnt': cnt,
-                'hands': ['0_u.png',] * hand_num
+                'hands': ['0_u.png'] * hand_num
             }
             return render(request, 'game.html', d)
     if cnt == 26:
@@ -114,5 +119,5 @@ def game(request):
             'player_get_num': player_get_num,
             'com_get_num': com_get_num,
             'cnt': cnt,
-            'hands': ['0_u.png',] * hand_num
+            'hands': ['0_u.png'] * hand_num
         }
