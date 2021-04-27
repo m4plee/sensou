@@ -12,6 +12,7 @@ html{
 .box{
     height: ;
 }
+
 h1{
     height: 50px;
     margin: 20px;
@@ -74,4 +75,10 @@ p{
 
 .card_img{
     width: 250px;
+}
+
+.user {
+    display: flex;
+    justify-content: center;
+    background-color: black;
 }
