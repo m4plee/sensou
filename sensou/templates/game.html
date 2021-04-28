@@ -45,7 +45,7 @@
             <div class="rightside">
                 <ul class="playerhand_card_img">
                     {% for hand in hands %}
-                    <form action="{% url 'game' %}" method="POST" name="your_card">
+                    <form action="" method="POST" name="your_card">
                         {% csrf_token %}
                         <li class="playercard"><input type="image" src="static/img/{{ hand }}" class="ura_playercard"></li>
                     </form>
@@ -57,8 +57,8 @@
     <hr>
     <div class="user">
 
-        <p class="message">{{ message }}</p>
-        {% if is_gamestart %}
+        <p class="message">{{ message }}</p> 
+        {% if is_gamestart %} 
         <form action="{% url 'game' %}" method='POST'>
             {% csrf_token %}
             <input type="submit" value="start">

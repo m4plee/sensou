@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from . import sensou
+from django.template import Context, Template
 
 
 def card_path(cards):
@@ -28,7 +29,7 @@ def game(request):
         request.session['com_get_num'] = com_get_num
         request.session['cnt'] = cnt
 
-        d = {
+       d = {
             'message': '始めましょう！',
             'player_card': ['0_u.png'],
             'com_card': ['0_u.png'],
@@ -54,7 +55,7 @@ def game(request):
             com_card = [deck.emission()]
             player_get_num += 0
             com_get_num += 0
- 
+
             if sensou.point(player_card) > sensou.point(com_card):
                 player_get_num += 1 + plus
                 com_get_num += 0
