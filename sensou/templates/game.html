@@ -45,9 +45,11 @@
             <div class="rightside">
                 <ul class="playerhand_card_img">
                     {% for hand in hands %}
-                    <form action="" method="POST" name="your_card">
+                    <form action="" method="POST">
                         {% csrf_token %}
-                        <li class="playercard"><input type="image" src="static/img/{{ hand }}" class="ura_playercard"></li>
+                        <li class="playercard">
+                            <input type="image" src="static/img/{{ hand }}" name="your" class="ura_playercard">
+                        </li>
                     </form>
                     {% endfor %}
                 </ul>
@@ -57,13 +59,24 @@
     <hr>
     <div class="user">
 
-        <p class="message">{{ message }}</p> 
-        {% if is_gamestart %} 
-        <form action="{% url 'game' %}" method='POST'>
+        <p class="message">{{ message }}</p>
+
+        {% if not is_gameover %}
+        {% if is_gamestart is True %}
+        <form action="" method='POST'>
             {% csrf_token %}
             <input type="submit" value="start">
         </form>
         {% endif %}
+        {% endif %}
+
+        {% if is_gamestart %}
+        <form action="" method='POST'>
+            {% csrf_token %}
+            <input type="submit" value="">
+        </form>
+        {% endif %}
+
 
 
         {% if is_gameover %}

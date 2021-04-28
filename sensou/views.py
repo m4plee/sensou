@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from . import sensou
-from django.template import Context, Template
 
 
 def card_path(cards):
@@ -11,7 +10,8 @@ def card_path(cards):
 
 
 def game(request):
-    if request.method == 'GET' or 'restart' in request.POST:
+    if request.method == 'GET':
+        is_gamestart = True
         is_gameover = False
         deck = sensou.Deck()
         cnt = 0
@@ -19,7 +19,6 @@ def game(request):
         com_get_num = 0
         plus = 0
         hand_num = 24 - int(cnt)
-        is_gamestart = True
 
         request.session['deck'] = deck
         request.session['is_gameover'] = is_gameover
@@ -29,7 +28,7 @@ def game(request):
         request.session['com_get_num'] = com_get_num
         request.session['cnt'] = cnt
 
-       d = {
+        d = {
             'message': '始めましょう！',
             'player_card': ['0_u.png'],
             'com_card': ['0_u.png'],
@@ -48,9 +47,9 @@ def game(request):
         com_get_num = request.session['com_get_num']
         is_gameover = request.session['is_gameover']
         cnt = request.session['cnt']
-        is_gamestart = False
 
-        if 'your_card' in request.POST:
+        if request.method == 'POST':
+            is_gamestart = False
             player_card = [deck.emission()]
             com_card = [deck.emission()]
             player_get_num += 0
@@ -94,7 +93,7 @@ def game(request):
                 }
                 return render(request, 'game.html', d)
 
-            else:
+            elif sensou.point(com_card) == sensou.point(player_card):
                 cnt += 1
                 plus += 1
                 hand_num = 24 - int(cnt)
@@ -114,25 +113,24 @@ def game(request):
                 }
                 return render(request, 'game.html', d)
 
-            if cnt == 26:
-                is_gameover = True
-                player_get_num = request.session['player_get_num']
-                com_get_num = request.session['com_get_num']
+        if cnt == 26:
+            player_get_num = request.session['player_get_num']
+            com_get_num = request.session['com_get_num']
 
-                if player_get_num > com_get_num:
-                    msg = f'{player_get_num - com_get_num}ポイント差であなたの勝ちです！'
-                elif com_get_num > player_get_num:
-                    msg = f'{com_get_num - player_get_num}ポイント差でNPCの勝ちです！'
-                else:
-                    msg = '引き分けです！'
+            if player_get_num > com_get_num:
+                msg = f'{player_get_num - com_get_num}ポイント差であなたの勝ちです！'
+            elif com_get_num > player_get_num:
+                msg = f'{com_get_num - player_get_num}ポイント差でNPCの勝ちです！'
+            else:
+                msg = '引き分けです！'
 
-                d = {
-                    'message': msg,
-                    'player_card': card_path(player_card),
-                    'com_card': card_path(com_card),
-                    'player_get_num': player_get_num,
-                    'com_get_num': com_get_num,
-                    'cnt': cnt,
-                    'hands': ['0_u.png'] * hand_num
-                }
-                return render(request, 'game.html', d)
+            d = {
+                'message': msg,
+                'player_card': card_path(player_card),
+                'com_card': card_path(com_card),
+                'player_get_num': player_get_num,
+                'com_get_num': com_get_num,
+                'cnt': cnt,
+                'hands': ['0_u.png'] * hand_num
+            }
+            return render(request, 'game.html', d)
