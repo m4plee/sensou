@@ -9,9 +9,17 @@ def card_path(cards):
     return path
 
 
+def point(card):
+    tup = card[0]
+    point = tup[0]
+    if point == 1:
+        return 11
+    else:
+        return point
+
+
 def game(request):
     if request.method == 'GET':
-        is_gamestart = True
         is_gameover = False
         deck = sensou.Deck()
         cnt = 0
@@ -22,7 +30,6 @@ def game(request):
 
         request.session['deck'] = deck
         request.session['is_gameover'] = is_gameover
-        request.session['is_gamestart'] = is_gamestart
         request.session['plus'] = plus
         request.session['player_get_num'] = player_get_num
         request.session['com_get_num'] = com_get_num
@@ -35,12 +42,12 @@ def game(request):
             'player_get_num': 0,
             'com_get_num': 0,
             'cnt': 0,
-            'hands': ['0_u.png'] * hand_num
+            'hands': ['0_u.png'] * hand_num,
         }
 
         return render(request, 'game.html', d)
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         plus = request.session['plus']
         deck = request.session['deck']
         player_get_num = request.session['player_get_num']
@@ -48,89 +55,107 @@ def game(request):
         is_gameover = request.session['is_gameover']
         cnt = request.session['cnt']
 
-        if request.method == 'POST':
-            is_gamestart = False
+        if 'your' in request.POST:
             player_card = [deck.emission()]
             com_card = [deck.emission()]
             player_get_num += 0
             com_get_num += 0
 
-            if sensou.point(player_card) > sensou.point(com_card):
+            if point(player_card) > point(com_card):
+                deck = request.session['deck']
+                is_gameover = request.session['is_gameover']
                 player_get_num += 1 + plus
                 com_get_num += 0
                 cnt += 1
                 plus = 0
                 hand_num = 24 - int(cnt)
+                if cnt == 26:
+                    is_gameover = True
+                else:
+                    d = {
+                        'message': 'プレイヤーに１ポイント入ります！',
+                        'player_card': card_path(player_card),
+                        'com_card': card_path(com_card),
+                        'player_get_num': player_get_num,
+                        'com_get_num': com_get_num,
+                        'cnt': cnt,
+                        'hands': ['0_u.png'] * hand_num,
+                    }
+                    player_card = list(player_card)
+                    player_card.clear()
+                    com_card = list(com_card)
+                    com_card.clear()
+                    return render(request, 'game.html', d)
+
+            if point(com_card) > point(player_card):
                 deck = request.session['deck']
                 is_gameover = request.session['is_gameover']
-                d = {
-                    'message': 'プレイヤーに１ポイント入ります！',
-                    'player_card': card_path(player_card),
-                    'com_card': card_path(com_card),
-                    'player_get_num': player_get_num,
-                    'com_get_num': com_get_num,
-                    'cnt': cnt,
-                    'hands': ['0_u.png'] * hand_num,
-                }
-                return render(request, 'game.html', d)
-
-            elif sensou.point(com_card) > sensou.point(player_card):
                 com_get_num += 1 + plus
                 player_get_num += 0
                 cnt += 1
                 hand_num = 24 - int(cnt)
+                plus = 0
+                if cnt == 26:
+                    is_gameover = True
+                else:
+                    d = {
+                        'message': 'NPCに１ポイント入ります！',
+                        'player_card': card_path(player_card),
+                        'com_card': card_path(com_card),
+                        'player_get_num': player_get_num,
+                        'com_get_num': com_get_num,
+                        'cnt': cnt,
+                        'hands': ['0_u.png'] * hand_num,
+                    }
+                    player_card = list(player_card)
+                    player_card.clear()
+                    com_card = list(com_card)
+                    com_card.clear()
+                    return render(request, 'game.html', d)
+
+            if point(com_card) == point(player_card):
                 deck = request.session['deck']
                 is_gameover = request.session['is_gameover']
-                plus = 0
-                d = {
-                    'message': 'NPCに１ポイント入ります！',
-                    'player_card': card_path(player_card),
-                    'com_card': card_path(com_card),
-                    'player_get_num': player_get_num,
-                    'com_get_num': com_get_num,
-                    'cnt': cnt,
-                    'hands': ['0_u.png'] * hand_num
-                }
-                return render(request, 'game.html', d)
-
-            elif sensou.point(com_card) == sensou.point(player_card):
                 cnt += 1
                 plus += 1
                 hand_num = 24 - int(cnt)
-                player_card = player_card.clear()
-                com_card = com_card.clear()
-                player_card = [deck.emission()]
-                com_card = [deck.emission()]
+                if cnt == 26:
+                    is_gameover = True
 
-                d = {
-                    'message': 'もう一度カードを選んでください',
-                    'player_card': card_path(player_card),
-                    'com_card': card_path(com_card),
-                    'player_get_num': player_get_num,
-                    'com_get_num': com_get_num,
-                    'cnt': cnt,
-                    'hands': ['0_u.png'] * hand_num
-                }
-                return render(request, 'game.html', d)
+                else:
+                    d = {
+                        'message': '引き分けです！もう一度カードを選んでください',
+                        'player_card': card_path(player_card),
+                        'com_card': card_path(com_card),
+                        'player_get_num': player_get_num,
+                        'com_get_num': com_get_num,
+                        'cnt': cnt,
+                        'hands': ['0_u.png'] * hand_num,
+                    }
+                    player_card = list(player_card)
+                    player_card.clear()
+                    com_card = list(com_card)
+                    com_card.clear()
+                    return render(request, 'game.html', d)
 
-        if cnt == 26:
-            player_get_num = request.session['player_get_num']
-            com_get_num = request.session['com_get_num']
+                if is_gameover:
+                    player_get_num = request.session['player_get_num']
+                    com_get_num = request.session['com_get_num']
 
-            if player_get_num > com_get_num:
-                msg = f'{player_get_num - com_get_num}ポイント差であなたの勝ちです！'
-            elif com_get_num > player_get_num:
-                msg = f'{com_get_num - player_get_num}ポイント差でNPCの勝ちです！'
-            else:
-                msg = '引き分けです！'
+                    if player_get_num > com_get_num:
+                        msg = f'{player_get_num - com_get_num}ポイント差であなたの勝ちです！'
+                    elif com_get_num > player_get_num:
+                        msg = f'{com_get_num - player_get_num}ポイント差でNPCの勝ちです！'
+                    else:
+                        msg = '引き分けです！'
 
-            d = {
-                'message': msg,
-                'player_card': card_path(player_card),
-                'com_card': card_path(com_card),
-                'player_get_num': player_get_num,
-                'com_get_num': com_get_num,
-                'cnt': cnt,
-                'hands': ['0_u.png'] * hand_num
-            }
-            return render(request, 'game.html', d)
+                    d = {
+                        'message': msg,
+                        'player_card': card_path(player_card),
+                        'com_card': card_path(com_card),
+                        'player_get_num': player_get_num,
+                        'com_get_num': com_get_num,
+                        'cnt': cnt,
+                        'hands': ['0_u.png']
+                    }
+                    return render(request, 'game.html', d)

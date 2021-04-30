@@ -34,10 +34,10 @@
                     <!-- ---------------------------------------------------------------------------------- -->
                     <h2>あなた</h2>
                     {% for show in player_card %}
-                    <form action="{% url 'game' %}" method='POST'>
-                        {% csrf_token %}
+                    <!-- <form action="{% url 'game' %}" method='POST'></form> -->
+                        <!-- {% csrf_token %} -->
                         <img src="static/img/{{ show }}" class="card_img">
-                    </form>
+                    <!-- </form> -->
                     {% endfor %}
                     <p>あなたは{{ player_get_num }}ポイントです</p>
                 </div>
@@ -45,12 +45,12 @@
             <div class="rightside">
                 <ul class="playerhand_card_img">
                     {% for hand in hands %}
-                    <form action="" method="POST">
-                        {% csrf_token %}
+                    <!-- <form action="{% url 'game' %}" method="POST"  name=""> -->
                         <li class="playercard">
-                            <input type="image" src="static/img/{{ hand }}" name="your" class="ura_playercard">
+                            <!-- {% csrf_token %} -->
+                            <input type="image" src="static/img/{{ hand }}" class="ura_playercard">
                         </li>
-                    </form>
+                    <!-- </form> -->
                     {% endfor %}
                 </ul>
             </div>
@@ -61,22 +61,10 @@
 
         <p class="message">{{ message }}</p>
 
-        {% if not is_gameover %}
-        {% if is_gamestart is True %}
-        <form action="" method='POST'>
+        <form action="{% url 'game' %}" method='POST'>
             {% csrf_token %}
-            <input type="submit" value="start">
+            <input type="submit" value="next" name='your'>
         </form>
-        {% endif %}
-        {% endif %}
-
-        {% if is_gamestart %}
-        <form action="" method='POST'>
-            {% csrf_token %}
-            <input type="submit" value="">
-        </form>
-        {% endif %}
-
 
 
         {% if is_gameover %}
