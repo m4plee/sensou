@@ -35,8 +35,8 @@
                     <h2>あなた</h2>
                     {% for show in player_card %}
                     <!-- <form action="{% url 'game' %}" method='POST'></form> -->
-                        <!-- {% csrf_token %} -->
-                        <img src="static/img/{{ show }}" class="card_img">
+                    <!-- {% csrf_token %} -->
+                    <img src="static/img/{{ show }}" class="card_img">
                     <!-- </form> -->
                     {% endfor %}
                     <p>あなたは{{ player_get_num }}ポイントです</p>
@@ -46,10 +46,10 @@
                 <ul class="playerhand_card_img">
                     {% for hand in hands %}
                     <!-- <form action="{% url 'game' %}" method="POST"  name=""> -->
-                        <li class="playercard">
-                            <!-- {% csrf_token %} -->
-                            <input type="image" src="static/img/{{ hand }}" class="ura_playercard">
-                        </li>
+                    <li class="playercard">
+                        <!-- {% csrf_token %} -->
+                        <image src="static/img/{{ hand }}" class="ura_playercard">
+                    </li>
                     <!-- </form> -->
                     {% endfor %}
                 </ul>
