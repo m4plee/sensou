@@ -29,6 +29,7 @@ def game(request):
         plus = 0
         hand_num = 26 - int(game_cnt)
         win_get_num = 0
+        is_turn = False
 
         request.session['deck'] = deck
         request.session['is_gamestart'] = is_gamestart
@@ -38,6 +39,7 @@ def game(request):
         request.session['com_get_num'] = com_get_num
         request.session['game_cnt'] = game_cnt
         request.session['win_get_num'] = win_get_num
+        request.session['is_turn'] = is_turn
 
         d = {
             'message': '始めましょう！',
@@ -46,12 +48,14 @@ def game(request):
             'player_get_num': 0,
             'com_get_num': 0,
             'hands': ['0_u.png'] * hand_num,
+            'is_gamestart': is_gamestart,
         }
 
         return render(request, 'game.html', d)
 
     if request.method == 'POST':
         is_gamestart = False
+        is_turn = True
         plus = request.session['plus']
         deck = request.session['deck']
         player_get_num = request.session['player_get_num']
@@ -90,7 +94,8 @@ def game(request):
                     'com_card': card_path(com_card),
                     'player_get_num': player_get_num,
                     'com_get_num': com_get_num,
-                    'hands': ['0_u.png'] * 0
+                    'hands': ['0_u.png'] * 0,
+                    'is_gameover': is_gameover,
                 }
                 return render(request, 'game.html', d)
 
@@ -102,6 +107,7 @@ def game(request):
                 game_cnt = request.session['game_cnt']
                 player_get_num += 0
                 com_get_num += 0
+                is_turn = request.session['is_turn']
 
                 if point(player_card) > point(com_card):
                     deck = request.session['deck']
@@ -131,6 +137,7 @@ def game(request):
                         'player_get_num': player_get_num,
                         'com_get_num': com_get_num,
                         'hands': ['0_u.png'] * hand_num,
+                        'is_turn': is_turn
                     }
                     plus = 0
                     request.session['plus'] = plus
@@ -154,6 +161,7 @@ def game(request):
                     plus = request.session['plus']
                     win_get_num = request.session['win_get_num']
                     game_cnt = request.session['game_cnt']
+                    is_turn = request.session['is_turn']
 
                     game_cnt += 1
                     hand_num = 26 - int(game_cnt)
@@ -177,6 +185,7 @@ def game(request):
                         'player_get_num': player_get_num,
                         'com_get_num': com_get_num,
                         'hands': ['0_u.png'] * hand_num,
+                        'is_turn': is_turn,
                     }
                     plus = 0
                     win_get_num = 0
@@ -199,6 +208,7 @@ def game(request):
                     plus = request.session['plus']
                     win_get_num = request.session['win_get_num']
                     game_cnt = request.session['game_cnt']
+                    is_turn = request.session['is_turn']
 
                     game_cnt += 1
                     plus += 1
@@ -220,6 +230,7 @@ def game(request):
                         'player_get_num': player_get_num,
                         'com_get_num': com_get_num,
                         'hands': ['0_u.png'] * hand_num,
+                        'is_turn': is_turn,
                     }
                     request.session['plus'] = plus
                     request.session['win_get_num'] = win_get_num

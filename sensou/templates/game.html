@@ -61,13 +61,18 @@
 
         <p class="message">{{ message }}</p>
 
+        {% if is_gamestart %}
+            
         <form action="{% url 'game' %}" method='POST'>
             {% csrf_token %}
             <input type="submit" value="next" name='your'>
         </form>
+            
+        {% endif %}
+            
 
 
-        {% if is_gameover %}
+        {% if is_gameover is True %}
         <form action="{% url 'game' %}" method='POST'>
             {% csrf_token %}
             <input type="submit" value="もう一度" name="restart">
