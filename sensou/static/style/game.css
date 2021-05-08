@@ -2,21 +2,43 @@ html{
     width: auto;
 }
 
+input{
+    margin-left: 20px;
+}
+
 .game-box{
     margin: 20px;
     padding: 0px;
     width: auto;
     text-align: center;
+    justify-content: center;
+    justify-content: space-evenly;
 }
 
 .box{
     height: 250px;
 }
 
+.button{
+    display: flex;
+    list-style: none;
+    padding: 0px;
+    width: 100%;
+    margin-right: 30px;
+}
+
+.button_card{
+    width: 50%;
+    padding: 0px;
+    margin-right: 30px;
+    margin-left: 10px;
+}
+
 h1{
     text-align: center;
     height: 40px;
     margin: 20px;
+    font-size: 30px;
 }
 
 h2{
@@ -38,26 +60,21 @@ p{
 .container{
     display: flex;
     justify-content: center;
-}
-
-.leftside{
-    align-content: flex-start;
+    margin: 20px;
 }
 
 .comhand_card_img{
     display: flex;
     list-style: none;
     padding: 0%;
-}
-
-.rightside{
-    align-content: flex-end;
+    width: 100%;
 }
 
 .playerhand_card_img{
     list-style: none;
     padding: 0%;
     display: flex;
+    width: 100%;
 }
 
 .comcard{
@@ -69,8 +86,7 @@ p{
 }
 
 .message{
-    background-color: aqua;
-    font-size: 30px;
+    font-size: 20px;
     margin: 40px;
     justify-content: center;
 }

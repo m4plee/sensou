@@ -19,7 +19,7 @@ def point(card):
 
 
 def game(request):
-    if request.method == 'GET':
+    if request.method == 'GET' or 'restart' in request.POST:
         is_gamestart = True
         is_gameover = False
         deck = sensou.Deck()

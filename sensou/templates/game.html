@@ -16,7 +16,6 @@
         <h1>戦争だぁ！</h1>
         <hr>
         <div class="game_board">
-            <div class="leftside"></div>
             <ul class="comhand_card_img">
                 {% for hand in hands %}
                 <li class="comcard"><img src="static/img/{{ hand }}" class="ura_comcard"></li>
@@ -34,41 +33,33 @@
                     <!-- ---------------------------------------------------------------------------------- -->
                     <h2>あなた</h2>
                     {% for show in player_card %}
-                    <!-- <form action="{% url 'game' %}" method='POST'></form> -->
-                    <!-- {% csrf_token %} -->
                     <img src="static/img/{{ show }}" class="card_img">
-                    <!-- </form> -->
                     {% endfor %}
                     <p>あなたは{{ player_get_num }}ポイントです</p>
                 </div>
             </div>
-            <div class="rightside">
-                <ul class="playerhand_card_img">
+            <ul class="playerhand_card_img">
 
-                    {% if not is_turn %}
-                    {% for hand in hands %}
-                    <!-- <form action="{% url 'game' %}" method="POST"  name=""> -->
-                    <li class="playercard">
-                        <!-- {% csrf_token %} -->
-                        <image src="static/img/{{ hand }}" class="ura_playercard">
-                    </li>
-                    <!-- </form> -->
-                    {% endfor %}
-                    {% endif %}
+                {% for hand in hands %}
+                <li class="playercard">
+                    <image src="static/img/{{ hand }}" class="ura_playercard">
+                </li>
+                {% endfor %}
 
+            </ul>
+            <ul class="button">
+                {% if is_turn %}
+                {% for hand in hands %}
+                <li class="playercard2">
+                    <form action="{% url 'game' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" src="static/img/{{ hand }}" class="button_card" name="your" value="↑">
+                    </form>
+                </li>
+                {% endfor %}
+                {% endif %}
+            </ul>
 
-                    {% if is_turn %}
-                    {% for hand in hands %}
-                    <li class="playercard">
-                        <form action="{% url 'game' %}" method="POST">
-                            {% csrf_token %}
-                            <input type="image" src="static/img/{{ hand }}" class="ura_playercard" name="your">
-                        </form>
-                    </li>
-                    {% endfor %}
-                    {% endif %}
-                </ul>
-            </div>
         </div>
     </div>
     <hr>
@@ -76,21 +67,29 @@
 
         <p class="message">{{ message }}</p>
 
-        <!-- {% if is_gamestart %} -->
-
+        
+        {% if is_turn %}
+        <form action="{% url 'game' %}" method='POST'>
+            {% csrf_token %}
+            <input type="submit" value="next" name='your'>
+        </form>  
+        {% endif %}
+            
+        
+        {% if is_gamestart %}
         <form action="{% url 'game' %}" method='POST'>
             {% csrf_token %}
             <input type="submit" value="start" name='your'>
         </form>
-
-        <!-- {% endif %} -->
-
-
+        
+        {% endif %}
+        
+            
 
         {% if is_gameover is True %}
         <form action="{% url 'game' %}" method='POST'>
             {% csrf_token %}
-            <input type="submit" value="もう一度" name="restart">
+            <input type="submit" value="again?" name="restart">
         </form>
         {% endif %}
     </div>
